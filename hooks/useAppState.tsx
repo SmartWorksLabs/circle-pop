@@ -1,5 +1,6 @@
 import { SetStateAction, atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 
+// App state management
 export enum MenuStateType {
 	MENU = 'menu',
 	OPTIONS = 'options', 
