@@ -1,9 +1,9 @@
 export const cssColors = {
-    brightNiceRed: "#FF3333",
-    pink: "#FF00FF",
-    green: "#00FF00",
-    pitchBlack: "#000000",
-    spaceGray: "rgb(90, 90, 90)"
+    brightNiceRed: "#6366F1", // Modern indigo
+    pink: "#EC4899", // Modern pink
+    green: "#10B981", // Modern emerald
+    pitchBlack: "#0F172A", // Modern slate
+    spaceGray: "rgb(148, 163, 184)" // Modern slate gray
 }
 
 export interface Color {

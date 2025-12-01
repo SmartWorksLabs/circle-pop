@@ -1,13 +1,8 @@
 import {
 	StyleSheet,
+	View,
 } from "react-native";
-import { useFonts } from "expo-font";
-import Animated, {
-	FadeIn,
-	FadeOut,
-	ReanimatedLogLevel,
-	configureReanimatedLogger,
-} from "react-native-reanimated";
+import { ReanimatedLogLevel, configureReanimatedLogger } from "react-native-reanimated";
 import Game from "@/components/game/Game";
 import { GameModeType } from '@/hooks/useAppState';
 import React from "react";
@@ -15,7 +10,6 @@ import OptionsMenu from "@/components/OptionsMenu";
 import { MenuStateType, useAppState } from "@/hooks/useAppState";
 import MainMenu from "@/components/MainMenu";
 import HighScores from "@/components/HighScoresMenu";
-import { PieceParticle } from "@/components/PieceParticle";
 
 configureReanimatedLogger({
 	level: ReanimatedLogLevel.warn,
@@ -23,41 +17,36 @@ configureReanimatedLogger({
 });
 
 export default function App() {
-	const [loaded] = useFonts({
-		"Press-Start-2P": require("../assets/fonts/PressStart2P-Regular.ttf"),
-		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-		Silkscreen: require("../assets/fonts/Silkscreen-Regular.ttf"),
-		SilkscreenBold: require("../assets/fonts/Silkscreen-Bold.ttf"),
-	});
-
+	// No custom fonts needed - using system default sans-serif
 	const [ appState ] = useAppState();
 
-	if (!loaded) return null;
-
-	const gameModeSearch = appState.containsGameMode();
-	const gameMode = gameModeSearch ? gameModeSearch.current as GameModeType : undefined;
+	// Check the current state directly, not the entire chain
+	const currentState = appState.current;
+	const isGameMode = Object.values(GameModeType).includes(currentState as GameModeType);
+	const gameMode = isGameMode ? currentState as GameModeType : undefined;
+	const isMenu = currentState === MenuStateType.MENU;
+	const isOptions = currentState === MenuStateType.OPTIONS;
+	const isHighScores = currentState === MenuStateType.HIGH_SCORES;
 	
 	return (
-		<Animated.View entering={FadeIn} exiting={FadeOut} style={styles.container}>
-			{[...Array(25)].map((_, i) => (
-				<PieceParticle key={`particle${i}`} />
-			))}
-
-			{ (appState.containsState(MenuStateType.MENU) && !gameMode) && <MainMenu></MainMenu> }
+		<View style={styles.container}>
+			{ isMenu && !gameMode && <MainMenu></MainMenu> }
 			{ gameMode && <Game gameMode={gameMode}></Game> }
-			{ appState.containsState(MenuStateType.OPTIONS) && <OptionsMenu></OptionsMenu> }
-			{ appState.containsState(MenuStateType.HIGH_SCORES) && <HighScores></HighScores>}
-		</Animated.View>
+			{ isOptions && <OptionsMenu></OptionsMenu> }
+			{ isHighScores && <HighScores></HighScores>}
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "black",
+		backgroundColor: "#0F172A",
+		background: "linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%)",
 		alignItems: "center",
 		justifyContent: "center",
 		width: '100%',
-		height: '100%'
-	}
+		height: '100%',
+		position: 'relative',
+	},
 });

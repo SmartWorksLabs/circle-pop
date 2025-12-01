@@ -4,17 +4,21 @@ export default function SimplePopupView({children, style}: {children: any, style
 	if (style == undefined)
 		style = [];
     return <View style={[{
-		width: '81%',
-		height: '71%',
-		backgroundColor: 'rgba(5, 5, 5, 0.95)',
+		width: '90%',
+		maxWidth: 400,
+		backgroundColor: '#1E293B',
 		borderRadius: 20,
-		borderColor: 'rgb(90, 90, 90)',
-		borderWidth: 2,
+		borderColor: 'rgba(99, 102, 241, 0.2)',
+		borderWidth: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
-		position: 'absolute',
 		zIndex: 100,
         overflowY: 'scroll',
-		boxSizing: 'border-box'
+		boxSizing: 'border-box',
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 8 },
+		shadowOpacity: 0.3,
+		shadowRadius: 20,
+		elevation: 20,
 	}, ...style]}>{children}</View>
 }

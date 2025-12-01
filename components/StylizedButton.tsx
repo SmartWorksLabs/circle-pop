@@ -18,16 +18,23 @@ export default function StylizedButton({text, onClick, backgroundColor, centered
 const styles = StyleSheet.create({
 	stylizedButton: {
 		width: 160,
-		height: 30,
+		height: 40,
 		borderRadius: 10,
 		justifyContent: 'center',
 		alignItems: 'center',
-		margin: 4
+		margin: 4,
+		borderWidth: 0,
+		backgroundColor: '#6366F1',
+		shadowColor: "#6366F1",
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 0.2,
+		shadowRadius: 4,
+		elevation: 4,
 	},
 	stylizedButtonText: {
-		fontSize: 18,
-		color: 'white',
-		fontFamily: 'Silkscreen',
-        fontWeight: '100'
+		fontSize: 14,
+		color: '#FFFFFF',
+        fontWeight: '600',
+		letterSpacing: 0.5,
 	}
 });

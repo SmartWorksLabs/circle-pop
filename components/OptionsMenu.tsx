@@ -8,10 +8,15 @@ export default function OptionsMenu() {
 	const [ appState, setAppState, _appendAppState, popAppState ] = useAppState();
 
 	return <SimplePopupView>
-		<StylizedButton onClick={popAppState} text="Back" backgroundColor={cssColors.spaceGray}></StylizedButton>
-		{ appState.containsGameMode() && 
-			<StylizedButton onClick={() => { setAppState(MenuStateType.MENU) }} text="Quit Run" backgroundColor={cssColors.brightNiceRed}></StylizedButton>
-		}
+		<View style={styles.optionsContainer}>
+			<Text style={styles.optionsTitle}>Settings</Text>
+			<View style={styles.buttonContainer}>
+				<StylizedButton onClick={popAppState} text="Back" backgroundColor={cssColors.spaceGray}></StylizedButton>
+				{ appState.containsGameMode() && 
+					<StylizedButton onClick={() => { setAppState(MenuStateType.MENU) }} text="Quit Run" backgroundColor={cssColors.brightNiceRed}></StylizedButton>
+				}
+			</View>
+		</View>
 	</SimplePopupView>
 }
 
@@ -26,6 +31,23 @@ function SettingLabel({title, description, children}: {title: string, descriptio
 }
 
 const styles = StyleSheet.create({
+	optionsContainer: {
+		width: '100%',
+		alignItems: 'center',
+		padding: 20,
+	},
+	optionsTitle: {
+		color: '#6366F1',
+		fontSize: 28,
+		fontWeight: '700',
+		marginBottom: 30,
+		letterSpacing: -0.5,
+	},
+	buttonContainer: {
+		width: '100%',
+		alignItems: 'center',
+		gap: 12,
+	},
 	settingLabelContainer: {
 		width: '80%',
 		height: 'auto',
@@ -42,13 +64,13 @@ const styles = StyleSheet.create({
 		justifyContent: 'flex-end',
 	},
 	settingTitle: {
-		color: 'white',
+		color: '#6366F1',
 		fontSize: 16,
-		fontFamily: 'Silkscreen'
+		fontWeight: '600',
 	},
 	settingDesc: {
-		color: 'rgb(160, 160, 160)',
-		fontSize: 8,
-		fontFamily: 'Silkscreen'
+		color: '#94A3B8',
+		fontSize: 12,
+		fontWeight: '400',
 	}
 });

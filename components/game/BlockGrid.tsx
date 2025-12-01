@@ -42,22 +42,13 @@ function createBlockStyle(x: number, y: number, board: SharedValue<Board>): any 
     const boardSize = board.value.length;
     const loadBlockFlash = useSharedValue(0);
     const placedBlockFall = useSharedValue(0);
-    const placedBlockDirectionX = useSharedValue(0);
-    const placedBlockDirectionY = useSharedValue(0);
-    const placedBlockRotation = useSharedValue(0);
-
+    
     useAnimatedReaction(() => {
         return board.value[y][x].blockType
     }, (cur, prev) => {
+        // Block clearing animation - spin and shrink
         if (cur == BoardBlockType.EMPTY && (prev == BoardBlockType.FILLED || prev == BoardBlockType.HOVERED_BREAK_EMPTY || prev == BoardBlockType.HOVERED_BREAK_FILLED)) {
-            const angle = Math.random() * Math.PI * 2;
-            const distance = 200;
-            const rotation = (Math.random() - 0.5) * Math.PI * 2;
-            
-            placedBlockDirectionX.value = Math.cos(angle) * distance;
-            placedBlockDirectionY.value = Math.sin(angle) * distance;
-            placedBlockRotation.value = rotation;
-            
+            // No need for direction/rotation values since we're just spinning in place
             placedBlockFall.value = withTiming(1, { 
                 duration: 500 
             }, (finished) => {
@@ -72,17 +63,8 @@ function createBlockStyle(x: number, y: number, board: SharedValue<Board>): any 
     useEffect(() => {
         if (board.value[y][x].blockType != BoardBlockType.EMPTY) 
             return;
-        const step = 70;
-        const upwardDelay = (boardSize - 1 - y) * step;
-        const downwardDelay = 2 * y * step;
-        
-        loadBlockFlash.value = withDelay(
-            upwardDelay,
-            withSequence(
-                withTiming(1, { duration: step }),
-                withDelay(downwardDelay, withTiming(0, { duration: step }))
-            )
-		);
+        // Simplified - no flash animation to reduce delays
+        loadBlockFlash.value = 0;
     }, [board.value[y][x].blockType]);
 
     const animatedStyle = useAnimatedStyle(() => {
@@ -95,22 +77,20 @@ function createBlockStyle(x: number, y: number, board: SharedValue<Board>): any 
             };
         }
 
+        // No enlargement effect - just show the hovered break blocks normally
+
         if (placedBlockFall.value > 0) {
             let progress = placedBlockFall.value;
 			progress = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);// easeOutCirc
+            // Spin and shrink animation instead of dispersing
+            const spinRotation = progress * Math.PI * 4; // 2 full rotations
             return {
                 ...createFilledBlockStyle(block.color),
                 opacity: 1 - progress,
                 transform: [
-                    { scale: 1 - progress },
+                    { scale: 1 - progress }, // Shrink to 0
                     { 
-                        translateX: placedBlockDirectionX.value * progress 
-                    },
-                    { 
-                        translateY: placedBlockDirectionY.value * progress 
-                    },
-                    { 
-                        rotate: `${placedBlockRotation.value * progress}rad` 
+                        rotate: `${spinRotation}rad` // Spin 2 full rotations
                     }
                 ]
             }
@@ -129,7 +109,6 @@ function createBlockStyle(x: number, y: number, board: SharedValue<Board>): any 
                     : block.hoveredBreakColor;
             style = {
                 ...createFilledBlockStyle(blockColor),
-                boxShadow: '0px 0px 30px ' + colorToHex(blockColor)
             };
         }
 
@@ -174,11 +153,14 @@ export default function BlockGrid({
 		let style: any;
 		if (draggingPiece.value == null) {
 			style = {
-				borderColor: 'white'
+				borderColor: 'transparent',
 			}
 		} else {
+			const pieceColor = colorToHex(hand.value[draggingPiece.value!]!.color);
 			style = {
-				borderColor: colorToHex(hand.value[draggingPiece.value!]!.color)
+				borderWidth: 2,
+				borderColor: pieceColor,
+				borderRadius: 16,
 			}
 		}
 		return style;
@@ -239,15 +221,21 @@ function BlockDroppable({
 		runOnJS(updateLayout)();
 		const active = possibleBoardDropSpots.value[y][x] == 1;
 		if (active) {
-			// use a smaller size droppable than the block so that detection does not overlap with other blocks.
+			// Very large hitbox - covers almost the entire block for maximum drop area
 			return {
 				width: HITBOX_SIZE,
 				height: HITBOX_SIZE,
+				position: 'absolute',
+				top: (GRID_BLOCK_SIZE - HITBOX_SIZE) / 2,
+				left: (GRID_BLOCK_SIZE - HITBOX_SIZE) / 2,
 			};
 		} else {
 			return {
 				width: 0,
 				height: 0,
+				position: 'absolute',
+				top: (GRID_BLOCK_SIZE) / 2,
+				left: (GRID_BLOCK_SIZE) / 2,
 			};
 		}
 	}, [props, possibleBoardDropSpots]);
@@ -264,8 +252,8 @@ const styles = StyleSheet.create({
 		width: GRID_BLOCK_SIZE,
 		height: GRID_BLOCK_SIZE,
 		margin: 0,
-		borderWidth: 1,
-		borderRadius: 0,
+		borderWidth: 0,
+		borderRadius: 9999, // Make it a circle
 		position: "absolute",
 		justifyContent: "center",
 		alignItems: "center",
@@ -274,11 +262,18 @@ const styles = StyleSheet.create({
 		//width: GRID_BLOCK_SIZE * BOARD_LENGTH + 8,
 		//height: GRID_BLOCK_SIZE * BOARD_LENGTH + 8,
 		position: "relative",
-		backgroundColor: "rgb(0, 0, 0, 1)",
-		borderWidth: 3,
-		borderRadius: 5,
-		borderColor: "rgb(255, 255, 255)",
+		backgroundColor: "#1E293B",
+		borderWidth: 1,
+		borderRadius: 20,
+		borderColor: "rgba(99, 102, 241, 0.2)",
 		opacity: 1,
+		overflow: 'visible',
+		pointerEvents: 'box-none',
+		shadowColor: "#000",
+		shadowOffset: { width: 0, height: 4 },
+		shadowOpacity: 0.2,
+		shadowRadius: 12,
+		elevation: 8,
 	},
 	hitbox: {
 		width: HITBOX_SIZE,

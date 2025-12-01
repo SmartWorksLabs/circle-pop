@@ -88,30 +88,30 @@ function createTimeAgoString(date: number): string {
 
 const styles = StyleSheet.create({
     noScoresText: {
-        color: 'white',
-        fontSize: 30,
-        fontFamily: 'Silkscreen',
+        color: '#6366F1',
+        fontSize: 18,
         textAlign: 'center',
-        marginBottom: 20
+        marginBottom: 20,
+        fontWeight: '600',
     },
     scoreValueText: {
-        color: 'white',
-        fontSize: 30,
-        fontFamily: 'Silkscreen'
+        color: '#EC4899',
+        fontSize: 24,
+        fontWeight: '700',
     },
     scoreTimeText: {
-        color: 'rgb(150, 150, 150)',
-        fontSize: 15,
-        fontFamily: 'Silkscreen'
+        color: '#94A3B8',
+        fontSize: 12,
+        fontWeight: '400',
     },
     header: {
-        color: 'white',
-        fontSize: 30,
-        fontFamily: 'Silkscreen'
+        color: '#6366F1',
+        fontSize: 20,
+        fontWeight: '700',
     },
     subHeader: {
-        color: 'rgb(100, 100, 100)',
-        fontSize: 24,
-        fontFamily: 'Silkscreen'
+        color: '#94A3B8',
+        fontSize: 14,
+        fontWeight: '400',
     }
 });

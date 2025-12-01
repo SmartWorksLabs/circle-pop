@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "blockerino",
-    "slug": "blockerino",
+    "name": "Circle Pop!",
+    "slug": "circle-pop",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "circlepop",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -33,19 +33,10 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      [
-        "expo-font",
-        {
-          "fonts": [
-            "./assets/fonts/PressStart2P-Regular.ttf"
-          ]
-        }
-      ],
       "expo-audio"
     ],
     "experiments": {
-      "typedRoutes": true,
-      "baseUrl": "/blockerino"
+      "typedRoutes": true
     }
   }
 }
